@@ -1,0 +1,494 @@
+\documentclass[a4paper]{article}
+\usepackage[pdftex]{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage[english]{babel}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{ifthen}
+\usepackage{listings}
+% move the asterisk at the right position
+\lstset{basicstyle=\ttfamily,tabsize=4,literate={*}{${}^*{}$}1}
+%\lstset{language=C,basicstyle=\ttfamily}
+\usepackage{moreverb}
+\usepackage{palatino}
+\usepackage{multicol}
+\usepackage{tabularx}
+\usepackage{comment}
+\usepackage{verbatim}
+\usepackage{color}
+
+% Because of an error on line 41 I added this
+\usepackage{graphicx}
+
+% Used for drawing DFAs and NFAs
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning}
+
+% Defined checkmark sign
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+% Table coloring
+\usepackage{color, colortbl}
+\usepackage[first=0,last=9]{lcg}
+
+% Tab
+\newcommand\tab[1][1.15cm]{\hspace*{#1}}
+
+% Degree sign
+\usepackage{gensymb}
+
+% Matrices
+\usepackage{amsmath}
+
+%% pdflatex?
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+\pdffalse % we are not running PDFLaTeX
+\else
+\pdfoutput=1 % we are running PDFLaTeX
+\pdftrue
+\fi
+%\ifpdf
+%\usepackage[pdftex]{graphicx}
+%\else
+%\usepackage{graphicx}
+%\fi
+\ifpdf
+\DeclareGraphicsExtensions{.pdf, .jpg}
+\else
+\DeclareGraphicsExtensions{.eps, .jpg}
+\fi
+
+\parindent=0cm
+\parskip=0cm
+
+\setlength{\columnseprule}{0.4pt}
+\addtolength{\columnsep}{2pt}
+
+\addtolength{\textheight}{5.5cm}
+\addtolength{\topmargin}{-26mm}
+\pagestyle{empty}
+
+%%
+%% Sheet setup
+%% 
+\newcommand{\coursename}{Computer Graphics}
+\newcommand{\courseno}{CO19-320322}
+ 
+\newcommand{\sheettitle}{Homework}
+\newcommand{\mytitle}{}
+\newcommand{\mytoday}{March 22nd, 2019}
+
+% Current Assignment number
+\newcounter{assignmentno}
+\setcounter{assignmentno}{1}
+
+% Current Problem number, should always start at 1
+\newcounter{problemno}
+\setcounter{problemno}{1}
+
+%%
+%% problem and bonus environment
+%%
+\newcounter{probcalc}
+\newcommand{\exercise}[2]{
+  \pagebreak[2]
+  \setcounter{probcalc}{#2}
+  ~\\
+  {\large \textbf{Exercise \arabic{assignmentno}.\arabic{problemno}} \hspace{0.2cm}\textit{#1}} \refstepcounter{problemno}\vspace{2pt}\\}
+
+\newcommand{\bonus}[2]{
+  \pagebreak[2]
+  \setcounter{probcalc}{#2}
+  ~\\
+  {\large \textbf{Bonus Problem \textcolor{blue}{\arabic{assignmentno}}.\textcolor{blue}{\arabic{problemno}}} \hspace{0.2cm}\textit{#1}} \refstepcounter{problemno}\vspace{2pt}\\}
+
+%% some counters  
+\newcommand{\assignment}{\arabic{assignmentno}}
+
+%% solution  
+\newcommand{\solution}{\pagebreak[2]{\bf Solution:}\\}
+
+%% Hyperref Setup
+\hypersetup{pdftitle={Homework \assignment},
+  pdfsubject={\coursename},
+  pdfauthor={},
+  pdfcreator={},
+  pdfkeywords={Computer Graphics},
+  %  pdfpagemode={FullScreen},
+  %colorlinks=true,
+  %bookmarks=true,
+  %hyperindex=true,
+  bookmarksopen=false,
+  bookmarksnumbered=true,
+  breaklinks=true,
+  %urlcolor=darkblue
+  urlbordercolor={0 0 0.7}
+}
+
+\begin{document}
+\coursename \hfill Course: \courseno\\
+Jacobs University Bremen \hfill \mytoday\\
+Dragi Kamov\hfill
+\vspace*{0.3cm}\\
+\begin{center}
+{\Large \sheettitle{} \assignment\\}
+\end{center}
+
+\exercise{}{0}
+\solution
+\begin{enumerate}
+    \item Every Cartesian coordinate system is orthogonal. Every orthogonal coordinate system is parallel. \textbf{True}
+    \item Non-uniform scaling transformation is linear. \textbf{True}
+    \item Order of transformations does not matter if one uses homogeneous coordinates. \textbf{False}
+    \item Perspective projection in OpenGL yields vertices coordinates in (x, y) such that x $ \in $ $ \langle $0, screen\_width -1$ \rangle $, x $\in$ $ \langle $0, screen\_height - 1$ \rangle $. \textbf{True}
+    \item OpenGL functions starting with $ glu $ prefix are hardware-specific. \textbf{False}
+\end{enumerate}
+ 
+\exercise{}{0}
+\solution
+\begin{itemize}
+    \item[a)]The triangle is scaled with factors 3 and -1 in the x- and y-coordinate, respectively, rotated (clockwise) by 90$ \degree $ around the z-coordinate, and translated by distance bx = 2 units in the direction of the x-coordinate. The transformations are executed in the given order.
+    \begin{itemize}
+        \item Derive the transformation matrix of each transformation step in homogeneous coordinates.
+        \begin{center}
+            $ S_z(3)=
+            \begin{bmatrix}
+            3 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix} $
+            \end{center}
+            \begin{center}
+            $ S_y(-1)=
+            \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & -1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}$
+            \end{center}
+            \begin{center}
+            $ R_y(\theta)=
+            \begin{bmatrix}
+            cos\theta & -sin\theta & 0 & 0 \\
+            sin\theta & cos\theta & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}$
+            \\ $ \implies \theta = -\pi / 2 $
+            \end{center}
+            \begin{center}
+            $ R_y(-\pi / 2)=
+            \begin{bmatrix}
+            0 & 1 & 0 & 0 \\
+            -1 & 0 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}$
+            \end{center}
+            $ b_x = 2 $
+            \begin{center}
+            $ T_x(b_x)=
+            \begin{bmatrix}
+            1 & 0 & 0 & b_x \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}$
+            \end{center}
+            \begin{center}
+            $ T_x(2)=
+            \begin{bmatrix}
+            1 & 0 & 0 & 2 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}$
+        \end{center}
+        \newpage
+        \item Compute the combined transformation matrix in homogeneous coordinates.
+        \begin{center}
+            $ T_x(2)R_y(-\pi/2)S_y(-1)S_x(3) = $
+        \end{center}
+        \begin{center}
+            $ \begin{bmatrix}
+            1 & 0 & 0 & 2 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            0 & 1 & 0 & 0 \\
+            -1 & 0 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & -1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            3 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix} = $
+        \end{center}
+        \begin{center}
+            $ = \begin{bmatrix}
+            1 & 0 & 0 & 2 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            0 & 1 & 0 & 0 \\
+            -1 & 0 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            3 & 0 & 0 & 0 \\
+            0 & -1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix} = $
+        \end{center}
+        \begin{center}
+            $ = \begin{bmatrix}
+            1 & 0 & 0 & 2 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            0 & -1 & 0 & 0 \\
+            -3 & 0 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix} = $
+        \end{center}
+        \begin{center}
+            $ = \begin{bmatrix}
+            0 & -1 & 0 & 2 \\
+            -3 & 0 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix} $
+        \end{center}
+        \item Apply the combined transformation matrix to triangle.
+        \begin{center}
+            $ = \begin{bmatrix}
+            0 & -1 & 0 & 2 \\
+            -3 & 0 & 0 & 0 \\
+            0 & 0 & 1 & 0 \\
+            0 & 0 & 0 & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            3 & 2 & 1 \\
+            0 & 0 & 1 \\
+            2 & 2 & 2 \\
+            1 & 1 & 1
+            \end{bmatrix} = $
+        \end{center}
+        \begin{center}
+            $ = \begin{bmatrix}
+            2 & 2 & 1 \\
+            -9 & -6 & -3 \\
+            2 & 2 & 2 \\
+            1 & 1 & 1
+            \end{bmatrix} $
+        \end{center}
+    \end{itemize}
+    \item[b)] The triangle is projected into the given image plane using perspective projections.
+    \begin{itemize}
+        \item Compute the projection matrix A in homogeneous coordinates for the given example. Leave the depth-related components a = b = 1.
+        \begin{center}
+            $ A = \begin{bmatrix}
+            h & 0 & 0 & 0 \\
+            0 & h & 0 & 0 \\
+            0 & 0 & a & b \\
+            0 & 0 & 1 & 0
+            \end{bmatrix} $
+        \end{center}
+        h = 1; a = 1; b = 1
+        \begin{center}
+            $ A = \begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 1 \\
+            0 & 0 & 1 & 0
+            \end{bmatrix} $
+        \end{center}
+        \item Apply the projection matrix A to the triangle and give the results to 2-D Cartesian screen coordinates, with the origin of the screen at (0, 0, 1). Remember that a projection takes two stages!
+        \begin{center}
+            $\begin{bmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 1 \\
+            0 & 0 & 1 & 0
+            \end{bmatrix} 
+            \begin{bmatrix}
+            2 & 2 & 1 \\
+            -9 & -6 & -3 \\
+            2 & 2 & 2 \\
+            1 & 1 & 1
+            \end{bmatrix} = $
+        \end{center}
+        \begin{center}
+            $ = \begin{bmatrix}
+            2 & 2 & 1 \\
+            -9 & -6 & -3 \\
+            3 & 3 & 3 \\
+            2 & 2 & 2
+            \end{bmatrix} $
+        \end{center}
+        \begin{center}
+            $ \frac{1}{2} \begin{bmatrix}
+            2 & 2 & 1 \\
+            -9 & -6 & -3 \\
+            3 & 3 & 3 \\
+            2 & 2 & 2
+            \end{bmatrix} = $
+        \end{center}
+        \begin{center}
+            $ = \begin{bmatrix}
+            1 & 1 & 0.5 \\
+            -4.5 & -3 & -1.5 \\
+            1.5 & 1.5 & 1.5 \\
+            1 & 1 & 1
+            \end{bmatrix} $
+        \end{center}
+        \begin{center}
+            $ p_1 = (1, -4.5) $ \\ 
+            $ p_2 = (1, -3) $ \\ 
+            $ p_3 = (0.5, -1,5) $
+        \end{center}
+        According to these coordinates we won't be able to see the triangle on the defined screen.
+    \end{itemize}
+\end{itemize}
+
+\exercise{}{0}
+\solution
+\begin{itemize}
+    \item Compute matrix \textbf{$ H_{ry} $} which will allow you to apply a rotation about the y-axis by angle $ \theta  = 30 \degree $ and matrix \textbf{$ T_x $} which will allow you to translate the cube along the x-axis by $ b_x = 0.5 $ units in homogeneous coordinates. \\
+    The vertices of the 3D cube:
+    \begin{center}
+        $ \langle (-1, 1, -1), (1, 1, -1), (1, -1, -1), (-1, -1, -1), (-1, 1, 1), (1, 1, 1), (1, -1, 1), (-1, -1, 1) \rangle $
+    \end{center}
+    \begin{center}
+        $ A = \begin{bmatrix}
+        -1 & 1 & 1 & -1 & -1 & 1 & 1 & -1 \\
+        1 & 1 & -1 & -1 & 1 & 1 & -1 & -1 \\
+        -1 & -1 & -1 & -1 & 1 & 1 & 1 & 1 \\
+        1 & 1 & 1 & 1 & 1 & 1 & 1 & 1
+        \end{bmatrix} $
+    \end{center}
+    \begin{center}
+        $ H_{ry} = \begin{bmatrix}
+        cos \theta & 0 & sin \theta & 0 \\
+        0 & 1 & 0 & 0 \\
+        -sin \theta & 0 & cos \theta & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix} $
+    \end{center}
+    \begin{center}
+        $ \theta = \pi / 6 $
+    \end{center}
+    \begin{center}
+        $ H_{ry} = \begin{bmatrix}
+        \sqrt{3}/2 & 0 & 1/2 & 0 \\
+        0 & 1 & 0 & 0 \\
+        -1/2 & 0 & \sqrt{3}/2 & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix} $
+    \end{center}
+    Computing $ T_x $ translating along the x axis by $ b_x = 0.5 $
+    \begin{center}
+        $ T_x = \begin{bmatrix}
+        1 & 0 & 0 & b_x \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix} $
+    \end{center}
+    \begin{center}
+        $ T_x = \begin{bmatrix}
+        1 & 0 & 0 & 0.5 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix} $
+    \end{center}
+    \item Apply the combined transformation matrix to the cube and compute the new vertex coordinates.
+    \begin{center}
+        $ [T_x][h_ry] = \begin{bmatrix}
+        1 & 0 & 0 & 0.5 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+        \sqrt{3}/2 & 0 & 1/2 & 0 \\
+        0 & 1 & 0 & 0 \\
+        -1/2 & 0 & \sqrt{3}/2 & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix} = $
+    \end{center}
+    \begin{center}
+        $ = \begin{bmatrix}
+        \sqrt{3}/2 & 0 & 1/2 & 1/2 \\
+        0 & 1 & 0 & 0 \\
+        -1/2 & 0 & \sqrt{3}/2 & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix}$
+    \end{center}
+    \begin{center}
+        $ [T_x][H_{ry}][A] = \begin{bmatrix}
+        \sqrt{3}/2 & 0 & 1/2 & 1/2 \\
+        0 & 1 & 0 & 0 \\
+        -1/2 & 0 & \sqrt{3}/2 & 0 \\
+        0 & 0 & 0 & 1
+        \end{bmatrix}
+        \begin{bmatrix}
+        -1 & 1 & 1 & -1 & -1 & 1 & 1 & -1 \\
+        1 & 1 & -1 & -1 & 1 & 1 & -1 & -1 \\
+        -1 & -1 & -1 & -1 & 1 & 1 & 1 & 1 \\
+        1 & 1 & 1 & 1 & 1 & 1 & 1 & 1
+        \end{bmatrix} = $
+    \end{center}
+    \begin{center}
+        $ = \begin{bmatrix}
+        -0.866 & 0.866 & -0.866 & -1.366 & 0.134 & 1.866 & 1.866 & -0.134 & 0.5 \\
+        1 & 1 & -1 & -1 & 1 & 1 & -1 & -1 & 0 \\
+        -0.366 & -1.366 & -1.366 & -0.366 & 1.366 & 0.366 & 0.366 & 1.366 & 0 \\
+        1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 
+        \end{bmatrix}$
+    \end{center}
+    \item Assuming $ r = -l $ and $ t = -b $ pick appropriate camera frustrum parameters $ r, l, t, b, f $ and  $ n $ to complete the matrix and ensure that all points of the cube are in the frustrum ($ \equiv $ they will remain in the unit cube after the projection). Remark: frustrum in case of orthographic projection is much simpler than in case of perspective projection!
+    \begin{center}
+        $ P_{\perp} = \begin{bmatrix}
+        \frac{2}{r-1} & 0 & 0 & -\frac{r+1}{r-1} \\
+        0 & \frac{2}{t-b} & 0 & -\frac{t+b}{t-b} \\
+        0 & 0 & -\frac{2}{f-n} & -\frac{f+n}{f-n} \\
+        0 & 0 & 0 & 1
+        \end{bmatrix} = 
+        \begin{bmatrix}
+        \frac{1}{r} & 0 & 0 & 0 \\
+        0 & \frac{1}{t} & 0 & 0 \\
+        0 & 0 & -\frac{2}{f-n} & -\frac{f+n}{f-n} \\
+        0 & 0 & 0 & 1
+        \end{bmatrix}$
+    \end{center}
+    \item Assuming the same camera position as in the previous exercise, carry out the projection of the transformed cube's vertices.
+    \item If the cube was to be translated along the z-axis by 1 unit towards the camera, would you have to update your frustrum parameters $ r, l, t $ and $ b $? Explain your answer.
+\end{itemize}
+
+\end{document}
